@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+The task uploaded on Vercel.com and this is a link for viewing and testing open[https://ezeats-todo-task.vercel.app/](https://ezeats-todo-task.vercel.app/)
 
 ## Getting Started
 
