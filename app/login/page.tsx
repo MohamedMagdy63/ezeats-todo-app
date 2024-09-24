@@ -3,7 +3,7 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { OAuthButtons } from './oauth-signin'
 import Image from 'next/image'
-import checklist from '@/assets/images/notes.gif'
+import checklist from '@/assets/images/3d-checklist.png'
 
 export default async function LoginPage() {
   const supabase = await createClient()
@@ -22,9 +22,6 @@ export default async function LoginPage() {
           <Image 
             src={checklist} 
             alt='Check list Main image' 
-            width={500} 
-            height={300} 
-            unoptimized
             className="transform hover:scale-105 transition duration-500 max-w-full h-auto"
           />
         </div>
