@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --background: linear-gradient(135deg, #fdfbfb, #ebedee); /* Soft gradient */
+  --background: #ffffff;
   --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: linear-gradient(135deg, #2a2a2a, #4b4b4b); /* Dark gradient */
+    --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
@@ -18,21 +18,10 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
-  transition: background 1.5s ease-in-out, color 1.5s ease-in-out; /* Smooth transition for both background and text */
-  background-attachment: fixed; /* Keeps background fixed on scroll */
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
-  }
-
-  /* Adding custom utility for vibrant backgrounds */
-  .bg-vibrant {
-    background: linear-gradient(45deg, #ff9a9e, #fad0c4 99%);
-  }
-
-  .bg-calm {
-    background: linear-gradient(45deg, #a18cd1, #fbc2eb 99%);
   }
 }

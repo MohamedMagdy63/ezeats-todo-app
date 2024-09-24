@@ -10,7 +10,6 @@ export default async function tasksPage(){
     if(!user){
         return redirect('/login')
     }
-
     return(
         <section>
             <Header/>

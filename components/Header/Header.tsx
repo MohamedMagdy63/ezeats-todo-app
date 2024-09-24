@@ -19,8 +19,10 @@ export default async function Header() {
         <div className="flex items-center space-x-4">
           {user !== null ? (
             <form action={logOut} className="flex items-center space-x-4">
-              <p className="text-gray-100">Welcome, {user.email}</p>
-              <button
+                <p className="text-gray-100">
+                    Welcome <span className="hidden sm:inline">,{user.email}</span>
+                </p>            
+                <button
                 type="submit"
                 className="py-2 px-4 bg-red-800 text-white font-medium rounded-md hover:bg-red-900 transition duration-200"
               >
