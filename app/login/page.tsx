@@ -1,6 +1,7 @@
 import { gitHubLogin, signup } from './actions'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
+import { OAuthButtons } from './oauth-signin'
 
 export default async function LoginPage() {
   const supabase = await createClient()
@@ -22,6 +23,7 @@ export default async function LoginPage() {
           <button formAction={gitHubLogin} className='m-2'>Log in</button>
           <button formAction={signup} className='m-2'>Sign up</button>
         </form>
+        <OAuthButtons/>
       </div>
     </div>
   )
