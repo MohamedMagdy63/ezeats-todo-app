@@ -1,18 +1,18 @@
-import { Login } from './actions'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import { OAuthButtons } from './oauth-signin'
 import Image from 'next/image'
 import checklist from '@/assets/images/3d-checklist.png'
 import Link from 'next/link'
+import { signUp } from './actions'
 
-export default async function LoginPage() {
+export default async function SignupPage() {
   const supabase = await createClient()
 
+  // Check if the user is already logged in
   const { data: { user } } = await supabase.auth.getUser()
 
   if (user) {
-    return redirect('/tasks')
+    return redirect('/login')
   }
 
   return (
@@ -29,9 +29,8 @@ export default async function LoginPage() {
 
         {/* Form Section */}
         <div className="w-full md:w-1/2 p-6 md:p-12 bg-gradient-to-r from-gray-50 via-gray-100 to-gray-200">
-          <form className="flex flex-col space-y-6">
+          <form action={signUp} className="flex flex-col space-y-6">
             <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Ez-eats TodoApp Task</h2>
-            
             <label htmlFor="email" className="text-sm font-medium text-gray-700">Your E-mail</label>
             <input 
               id="email" 
@@ -41,7 +40,15 @@ export default async function LoginPage() {
               placeholder="you@example.com"
               required 
             />
-            
+            <label htmlFor="userName" className="text-sm font-medium text-gray-700">Username</label>
+            <input 
+              id="userName" 
+              name="userName" 
+              type="text" 
+              className="p-4 border border-gray-300 text-black rounded-lg focus:ring-4 focus:ring-indigo-300 outline-none transition-shadow duration-300 w-full"
+              placeholder="Enter your username"
+              required 
+            />
             <label htmlFor="password" className="text-sm font-medium text-gray-700">Password</label>
             <input 
               id="password" 
@@ -51,26 +58,20 @@ export default async function LoginPage() {
               placeholder="••••••••"
               required 
             />
-
-            {/* Login Button */}
+            {/* Sign-up Button */}
             <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-              {/* Log in Button */}
               <button 
-                formAction={Login} 
-                className="flex-1 py-4 text-lg font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-md transition-transform duration-300 transform hover:scale-105 focus:ring-4 focus:ring-indigo-400"
+                type="submit" 
+                className="flex-1 py-4 text-lg font-semibold text-white bg-green-500 hover:bg-green-600 rounded-lg shadow-md transition-transform duration-300 transform hover:scale-105 focus:ring-4 focus:ring-green-400"
               >
-                Log in
+                Sign up
               </button>
             </div>
           </form>
-          {/* OAuth Buttons Section */}
-          <div className="mt-8">
-            <OAuthButtons />
-          </div>
-          <div className='text-blue-500 font-bold pt-3 underline'>
+          <div className="text-blue-500 font-bold pt-3 underline">
             <p>
-              <Link href='/signup'>
-                Create your account now.
+              <Link href='/login'>
+                Back to Login page
               </Link>
             </p>
           </div>

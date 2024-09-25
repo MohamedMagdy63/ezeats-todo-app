@@ -1,11 +1,19 @@
 import { logOut } from "@/app/login/actions";
-import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
+import { getUserData, saveUserEmail } from "./actions";
 
 export default async function Header() {
-  const supabase = await createClient();
-
-  const { data: { user } } = await supabase.auth.getUser();
+  let user;
+  try {
+    const userData = await getUserData();
+    user = userData;
+    // If the user is logged in, save the email and username
+    if (user?.email) {
+      await saveUserEmail(user.email, user.user_name);
+    }
+  } catch (error) {
+    console.error('Error fetching user data:', error.message);
+  }
 
   return (
     <header className="bg-transparent border-b fixed top-0 left-0 right-0 z-50 p-4">
@@ -17,12 +25,12 @@ export default async function Header() {
 
         {/* User Info and Auth Actions */}
         <div className="flex items-center space-x-4">
-          {user !== null ? (
+          {user ? (
             <form action={logOut} className="flex items-center space-x-4">
-                <p className="text-gray-100">
-                    Welcome <span className="hidden sm:inline">,{user.email}</span>
-                </p>            
-                <button
+              <p className="text-gray-100">
+                Welcome <span className="hidden sm:inline">,{user.user_name || user.email}</span>
+              </p>
+              <button
                 type="submit"
                 className="py-2 px-4 bg-red-800 text-white font-medium rounded-md hover:bg-red-900 transition duration-200"
               >

@@ -1,50 +1,48 @@
 'use server'
-
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-
 import { createClient } from '@/utils/supabase/server'
 import { Provider } from '@supabase/supabase-js'
 import { getURL } from '@/utils/helpers'
-
-export async function gitHubLogin(formData: FormData) {
+export async function Login(formData: FormData) {
   const supabase = createClient()
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
   const data = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   }
+  const { data: userCheck, error: userError } = await supabase
+  .from('users')
+  .select('email')
+  .eq('email', data.email)
+  .maybeSingle();
 
-  const { error } = await supabase.auth.signInWithPassword(data)
-
-  if (error) {
-    redirect('/login?message=Invalid Authentication Credentials')
+  if (userError || !userCheck) {
+    console.error('User not found:', userError?.message);
+    redirect('/login?message=Invalid Authentication Credentials');
+    return;
   }
+  try {
+    // Directly authenticate with Supabase
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
 
-  revalidatePath('/', 'layout')
-  redirect('/tasks')
-}
+    if (authError) {
+      console.error('Error during authentication:', authError.message);
+      redirect('/login?message=Invalid Authentication Credentials');
+      return;
+    }
 
-export async function signup(formData: FormData) {
-  const supabase = createClient()
+    // If authentication is successful, redirect to tasks page
+    revalidatePath('/', 'layout');
+    redirect('/tasks');
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    redirect('/login?message=Something went wrong. Please try again.');
   }
-
-  const { error } = await supabase.auth.signUp(data)
-
-  if (error) {
-    redirect('/login?message=Invalid Signup Credentials')
-  }
-
-  revalidatePath('/', 'layout')
-  redirect('/login')
 }
 
 export async function logOut() {
