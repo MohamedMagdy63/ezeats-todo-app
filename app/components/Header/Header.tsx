@@ -12,7 +12,7 @@ export default async function Header() {
       await saveUserEmail(user.email, user.user_name);
     }
   } catch (error) {
-    console.error('Error fetching user data:');
+    console.error('Error fetching user data:', error.message);
   }
 
   return (

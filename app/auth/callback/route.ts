@@ -34,5 +34,5 @@ export async function GET(request: Request) {
     }
 
     // return the user to an error page with instructions
-    return NextResponse.redirect(`https://ezeats-todo-task.vercel.app/login?message=Could not login with provider`)
+    return NextResponse.redirect(`${origin}/login?message=Could not login with provider`)
 }
