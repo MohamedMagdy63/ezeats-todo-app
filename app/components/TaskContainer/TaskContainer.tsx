@@ -123,7 +123,6 @@ const TaskItem = ({ task }: { task: any }) => {
   const [showModal, setShowModal] = React.useState(false);
 
   const handleSave = async (updatedTask: any) => {
-    console.log("Task updated:", updatedTask);
     await updateTask(updatedTask); // Trigger updateTask API call
   };
 

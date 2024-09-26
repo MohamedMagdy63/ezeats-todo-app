@@ -12,7 +12,6 @@ const ServerTaskContainer = async () => {
 
     if (user?.email) {
       const result = await GetTasks(user.email);
-      console.log("Fetched tasks:", result.tasks); // Log fetched tasks here
       tasks = result.tasks;
       error = result.error;
     }
