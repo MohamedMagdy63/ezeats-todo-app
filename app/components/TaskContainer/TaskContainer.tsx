@@ -1,5 +1,32 @@
-"use client"; // Client Component
+"use client"; 
+const handleDeleteTask = async (id: number) => {
+  try {
+    console.log('Attempting to delete task with id:', id);
 
+    const response = await fetch(`/api/delete-task`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id }), // Send task ID
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+
+    if (data.success) {
+      console.log('Task deleted successfully');
+      window.location.reload(); // Reload the page after deletion
+    } else {
+      console.error('Error deleting task:', data.error);
+    }
+  } catch (error) {
+    console.error('Error during deletion:', error);
+  }
+};
 const TaskContainer = ({ tasks = [], error }: { tasks: any[]; error: string | null }) => {
   // If there's an error, display it
   if (error) {
@@ -13,21 +40,7 @@ const TaskContainer = ({ tasks = [], error }: { tasks: any[]; error: string | nu
       </div>;
   }
 
-  // Function to handle task deletion
-  const handleDeleteTask = async (taskId: number) => {
-    const response = await fetch(`/api/supabase-client`, {
-      method: 'POST',
-      body: JSON.stringify({ taskId }),
-    });
-    const data = await response.json();
-
-    if (data.success) {
-      console.log('Task deleted successfully');
-      window.location.reload(); // Reload the page after deletion
-    } else {
-      console.error('Error deleting task');
-    }
-  };
+ 
 
   return (
     <div className="bg-gradient-to-br from-white to-blue-50 p-10 rounded-lg shadow-2xl relative top-36 w-full max-w-2xl mx-auto">
@@ -58,7 +71,7 @@ const TaskContainer = ({ tasks = [], error }: { tasks: any[]; error: string | nu
                 <button className="bg-blue-500 text-white py-1 px-3 rounded-lg hover:bg-blue-600 transition-colors duration-200">Edit</button>
                 <button
                   className="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600 transition-colors duration-200"
-                  onClick={() => handleDeleteTask(task.id)} // Call the handler with task ID
+                  onClick={() => handleDeleteTask(task.id)} 
                 >
                   Delete
                 </button>

@@ -2,6 +2,7 @@ import Header from "@/components/Header/Header"
 import TaskContainer from "@/components/TaskContainer/TaskContainer"
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
+import ServerTaskContainer from "../components/TaskContainer/ServerTaskContainer"
 
 
 export default async function tasksPage(){
@@ -15,7 +16,7 @@ export default async function tasksPage(){
     return(
         <section>
             <Header/>
-            <TaskContainer />
+            <ServerTaskContainer />
         </section>
     )
 }

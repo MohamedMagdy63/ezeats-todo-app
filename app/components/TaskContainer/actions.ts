@@ -1,4 +1,5 @@
 import { createClient } from "@/app/utils/supabase/server";
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export async function GetTasks(email: string) {
   const supabase = createClient();
@@ -31,12 +32,12 @@ export async function getUserData() {
     throw new Error('User not logged in');
   }
 }
-export async function DeleteTask(taskId: number) {
+export async function DeleteTask(id: number) {
   const supabase = createClient();
   const { error } = await supabase
     .from('tasks')
     .delete()
-    .eq('id', taskId);
+    .eq('id', id);
 
   if (error) {
     console.error('Error deleting task:', error.message);
@@ -45,3 +46,4 @@ export async function DeleteTask(taskId: number) {
 
   return { success: true, error: null };
 }
+
