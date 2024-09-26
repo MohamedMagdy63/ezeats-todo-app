@@ -59,7 +59,7 @@ const AddTaskForm = () => {
       if (!response.ok) {
         throw new Error('Failed to add task');
       }
-
+      window.location.reload()
       // Redirect to tasks page after successful addition
       router.push('/tasks');
     } catch (err) {
