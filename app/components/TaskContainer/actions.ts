@@ -1,5 +1,4 @@
-import { createClient } from "@/app/utils/supabase/server";
-import { NextApiRequest, NextApiResponse } from 'next';
+import { createClient } from '@/utils/supabase/server';
 
 export async function GetTasks(email: string) {
   const supabase = createClient();
@@ -47,3 +46,17 @@ export async function DeleteTask(id: number) {
   return { success: true, error: null };
 }
 
+export async function UpdateTask(taskId: number, updatedData: { task_name?: string; description?: string; is_completed?: boolean; task_priority?: string }) {
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('tasks')
+    .update(updatedData)
+    .eq('id', taskId);
+
+  if (error) {
+    console.error('Error updating task:', error.message);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, error: null };
+}

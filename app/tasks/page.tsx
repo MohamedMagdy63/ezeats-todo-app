@@ -1,13 +1,12 @@
-import Header from "@/components/Header/Header"
-import TaskContainer from "@/components/TaskContainer/TaskContainer"
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
 import ServerTaskContainer from "../components/TaskContainer/ServerTaskContainer"
+import AddTaskForm from "../components/AddTask/AddTask"
+import Header from "../components/Header/Header"
 
 
 export default async function tasksPage(){
     const supabase = await createClient()
-    
     const {data :{user}} =await supabase.auth.getUser()
 
     if(!user){
@@ -16,7 +15,15 @@ export default async function tasksPage(){
     return(
         <section>
             <Header/>
-            <ServerTaskContainer />
+            <div className="flex flex-col lg:flex-row justify-between w-full">
+                <div className="lg:w-1/2 w-full">
+                    <ServerTaskContainer /> 
+                </div>
+                <div className="lg:w-1/2 w-full">
+                    <AddTaskForm />
+                </div>
+            </div>
+                    
         </section>
     )
 }

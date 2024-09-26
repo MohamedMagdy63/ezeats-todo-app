@@ -16,7 +16,7 @@ export default async function Header() {
   }
 
   return (
-    <header className="bg-transparent border-b fixed top-0 left-0 right-0 z-50 p-4">
+    <header className="bg-black border-b fixed top-0 left-0 right-0 z-50 p-4">
       <div className="max-w-6xl mx-auto flex justify-between items-center">
         {/* Logo or App Name */}
         <Link href="/tasks" className="text-xl font-semibold text-white">
