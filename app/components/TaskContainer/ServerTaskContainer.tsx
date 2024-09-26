@@ -16,7 +16,7 @@ const ServerTaskContainer = async () => {
       error = result.error;
     }
   } catch (err) {
-    console.error('Error fetching tasks:', err.message);
+    console.error('Error fetching tasks:', (err as Error).message);
     error = 'An error occurred while fetching tasks';
   }
 
