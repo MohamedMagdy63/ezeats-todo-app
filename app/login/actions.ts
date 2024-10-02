@@ -16,33 +16,28 @@ export async function Login(formData: FormData) {
   .select('email')
   .eq('email', data.email)
   .maybeSingle();
-
+  console.log(userCheck)
   if (userError || !userCheck) {
     console.error('User not found:', userError?.message);
     redirect('/login?message=Invalid Authentication Credentials');
     return;
   }
   try {
-    // Directly authenticate with Supabase
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    });
-
+    const { error: authError } = await supabase.auth.signInWithPassword(data);
+  
     if (authError) {
-      console.error('Error during authentication:', authError.message);
+      console.error('Authentication Error:', authError);
+      console.error('Email:', data.email);
       redirect('/login?message=Invalid Authentication Credentials');
       return;
     }
-
-    // If authentication is successful, redirect to tasks page
+  
     revalidatePath('/', 'layout');
     redirect('/tasks');
-
   } catch (error) {
     console.error('Unexpected error:', error);
     redirect('/login?message=Something went wrong. Please try again.');
-  }
+  }  
 }
 
 export async function logOut() {

@@ -29,7 +29,7 @@ export default async function SignupPage() {
 
         {/* Form Section */}
         <div className="w-full md:w-1/2 p-6 md:p-12 bg-gradient-to-r from-gray-50 via-gray-100 to-gray-200">
-          <form action={signUp} className="flex flex-col space-y-6">
+          <form className="flex flex-col space-y-6">
             <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Ez-eats TodoApp Task</h2>
             <label htmlFor="email" className="text-sm font-medium text-gray-700">Your E-mail</label>
             <input 
@@ -38,15 +38,6 @@ export default async function SignupPage() {
               type="email" 
               className="p-4 border border-gray-300 text-black rounded-lg focus:ring-4 focus:ring-indigo-300 outline-none transition-shadow duration-300 w-full"
               placeholder="you@example.com"
-              required 
-            />
-            <label htmlFor="userName" className="text-sm font-medium text-gray-700">Username</label>
-            <input 
-              id="userName" 
-              name="userName" 
-              type="text" 
-              className="p-4 border border-gray-300 text-black rounded-lg focus:ring-4 focus:ring-indigo-300 outline-none transition-shadow duration-300 w-full"
-              placeholder="Enter your username"
               required 
             />
             <label htmlFor="password" className="text-sm font-medium text-gray-700">Password</label>
@@ -61,7 +52,7 @@ export default async function SignupPage() {
             {/* Sign-up Button */}
             <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
               <button 
-                type="submit" 
+                formAction={signUp}
                 className="flex-1 py-4 text-lg font-semibold text-white bg-green-500 hover:bg-green-600 rounded-lg shadow-md transition-transform duration-300 transform hover:scale-105 focus:ring-4 focus:ring-green-400"
               >
                 Sign up

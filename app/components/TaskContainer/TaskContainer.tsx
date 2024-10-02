@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 // Modal Component for editing task
 const Modal = ({ show, task, onClose, onSave }: { show: boolean; task: any; onClose: () => void; onSave: (updatedTask: any) => void }) => {
@@ -65,65 +66,66 @@ const Modal = ({ show, task, onClose, onSave }: { show: boolean; task: any; onCl
     </div>
   );
 };
+const fetchTasks = async () => {
+  try {
+    const response = await fetch("/api/get-task");
 
+    if (!response.ok) {
+      throw new Error("Failed to fetch tasks");
+    }
 
-// Function to update a task
+    const result  = await response.json(); // Ensure the response is parsed
+    return result.data;
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    throw error; // Let react-query handle the error
+  }
+};
+
 const updateTask = async (updatedTask: any) => {
-  try {
-    const response = await fetch(`/api/update-task`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedTask), // Send updated task data
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to update task");
-    }
-
-    const data = await response.json();
-
-    if (data.success) {
-      window.location.reload(); // Reload the page after updating
-    }
-  } catch (error) {
-    console.error("Error during update:", error);
+  const response = await fetch(`/api/update-task`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedTask),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update task");
   }
+  const result  = await response.json(); // Ensure the response is parsed
+  return result.data;
 };
-
-// Function to delete a task
 const deleteTask = async (id: number) => {
-  try {
-    const response = await fetch(`/api/delete-task`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id }), // Send task ID
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to delete task");
-    }
-
-    const data = await response.json();
-
-    if (data.success) {
-      window.location.reload(); // Reload the page after deletion
-    }
-  } catch (error) {
-    console.error("Error during deletion:", error);
+  const response = await fetch(`/api/delete-task`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to delete task");
   }
+  window.location.reload()
+  const result  = await response.json(); // Ensure the response is parsed
+  return result.data;
 };
-
-// Task item component
 const TaskItem = ({ task }: { task: any }) => {
   const { task_name, is_completed, created_at, description, task_priority, id } = task;
   const [showModal, setShowModal] = React.useState(false);
 
+  const queryClient = useQueryClient();
+
+  // Corrected mutation definition
+  const mutationUpdateTask = useMutation({
+    mutationFn: updateTask, // The function that performs the mutation
+    onSuccess: () => {
+      queryClient.invalidateQueries(["tasks"]);  // Refetch the task list after updating
+    },
+    onError: (error) => {
+      console.error("Error updating task:", error);
+    },
+  });
+
   const handleSave = async (updatedTask: any) => {
-    await updateTask(updatedTask); // Trigger updateTask API call
+    await mutationUpdateTask.mutateAsync(updatedTask);  // Use mutateAsync to trigger the mutation
   };
 
   return (
@@ -174,12 +176,21 @@ const TaskList = ({ tasks }: { tasks: any[] }) => {
     </ul>
   );
 };
+const TaskContainer = () => {
+  const { data: tasks, error, isLoading } = useQuery({
+    queryKey: ["tasks"],
+    queryFn: fetchTasks,
+    refetchOnWindowFocus: true,
+  });
 
-// Main task container component
-const TaskContainer = ({ tasks = [], error }: { tasks: any[]; error: string | null }) => {
-  if (error) {
-    return <div>Error: {error}</div>;
+  if (isLoading) {
+    return <div>Loading tasks...</div>;
   }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   if (!tasks.length) {
     return (
       <div className="bg-gradient-to-br from-white to-blue-50 p-10 rounded-lg shadow-2xl relative top-36 w-full max-w-2xl mx-auto">
@@ -187,6 +198,7 @@ const TaskContainer = ({ tasks = [], error }: { tasks: any[]; error: string | nu
       </div>
     );
   }
+
   return (
     <div className="bg-gradient-to-br from-white to-blue-50 p-10 rounded-lg shadow-2xl w-full lg:max-w-fit mx-auto lg:mx-0 relative top-36">
       <h1 className="text-4xl font-extrabold mb-8 text-center text-gray-700">Tasks</h1>
@@ -194,5 +206,6 @@ const TaskContainer = ({ tasks = [], error }: { tasks: any[]; error: string | nu
     </div>
   );
 };
+
 
 export default TaskContainer;

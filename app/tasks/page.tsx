@@ -20,10 +20,9 @@ export default async function tasksPage(){
                     <ServerTaskContainer /> 
                 </div>
                 <div className="lg:w-1/2 w-full">
-                    <AddTaskForm />
+                    <AddTaskForm userEmail={user.email} />
                 </div>
             </div>
-                    
         </section>
     )
 }
