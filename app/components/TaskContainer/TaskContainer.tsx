@@ -117,12 +117,17 @@ const TaskItem = ({ task }: { task: any }) => {
   const mutationUpdateTask = useMutation({
     mutationFn: updateTask, // The function that performs the mutation
     onSuccess: () => {
-      queryClient.invalidateQueries(["tasks"]);  // Refetch the task list after updating
+      // The queryClient.invalidateQueries expects a valid query key and potentially some filters.
+      // If you're querying tasks with the key `["tasks"]`, you should use the same key to invalidate.
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"], // Ensure the key is provided here
+      });
     },
     onError: (error) => {
       console.error("Error updating task:", error);
     },
   });
+  
 
   const handleSave = async (updatedTask: any) => {
     await mutationUpdateTask.mutateAsync(updatedTask);  // Use mutateAsync to trigger the mutation
