@@ -3,7 +3,7 @@ Here's an updated `README.md` file with your requested changes. I've added instr
 ---
 
 # Getting Started
-
+The app hosted on vercel and this is the link
 First, you need to ensure Docker is set up to run the project locally.
 
 ### Step 1: Run Docker Container
